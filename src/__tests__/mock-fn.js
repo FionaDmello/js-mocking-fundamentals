@@ -1,29 +1,27 @@
-const thumbWar = require('../thumb-war')
-const utils = require('../utils')
+const thumbWar = require("../thumb-war");
+const utils = require("../utils");
 
-test('returns winner', () => {
-  const originalGetWinner = utils.getWinner
-  utils.getWinner = jest.fn((p1, p2) => p1)
+test("return winner", () => {
+  const originalGetWinner = utils.getWinner;
 
-  const winner = thumbWar('Kent C. Dodds', 'Ken Wheeler')
-  expect(winner).toBe('Kent C. Dodds')
-  expect(utils.getWinner.mock.calls).toEqual([
-    ['Kent C. Dodds', 'Ken Wheeler'],
-    ['Kent C. Dodds', 'Ken Wheeler']
-  ])
-  // could also do these assertions:
-  expect(utils.getWinner).toHaveBeenCalledTimes(2)
+  // jest.fn is a wrapper for an implementation of a mock function which helps make sure the mock actually mocks the mocked function
+  utils.getWinner = jest.fn((p1, p2) => p1);
+
+  let winner = thumbWar("Fiona Dmello", "Sharon Salzburg"); // 1st call
+  let winner2 = thumbWar("A", "B"); // 3rd call
+
+  expect(winner).toBe("Fiona Dmello"); // 2nd call
+  expect(winner2).toBe("A"); //4th call
+
+  // below are ways to make sure that mock covers all cases
+  expect(utils.getWinner).toHaveBeenCalledTimes(4);
   expect(utils.getWinner).toHaveBeenNthCalledWith(
     1,
-    'Kent C. Dodds',
-    'Ken Wheeler'
-  )
-  expect(utils.getWinner).toHaveBeenNthCalledWith(
-    2,
-    'Kent C. Dodds',
-    'Ken Wheeler'
-  )
+    "Fiona Dmello",
+    "Sharon Salzburg"
+  );
+  expect(utils.getWinner).toHaveBeenNthCalledWith(3, "A", "B");
+  expect(utils.getWinner).toHaveBeenNthCalledWith(4, "A", "B");
 
-  // cleanup
-  utils.getWinner = originalGetWinner
-})
+  utils.getWinner = originalGetWinner;
+});

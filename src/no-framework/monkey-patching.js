@@ -4,11 +4,13 @@ const thumbWar = require("../thumb-war");
 const utils = require("../utils");
 
 let originalGetWinner = utils.getWinner;
-utils.getWinner = (p1, p2) => p1;
+utils.getWinner = jest.fn((p1, p2) => p1);
+// the above implementation has a bug: it allows Thumbwar to work and pass the test as long as the first param is passed to it, even without the second
+// to make sure that an implementation of the mock follows the same signature as the original, there are tests and utils that jest provides
 
 const winner = thumbWar("Fiona Dmello", "Fiona Shane");
 // because thumbWar uses utils function that randomly picks the winner,
-// the following assertion can pass or fail indeterminately
+// the following assertion can pass or fail indeterminately unless its monkey patched as shown
 
 assert.strictEqual(winner, "Fiona Dmello");
 
